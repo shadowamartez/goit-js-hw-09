@@ -15,7 +15,9 @@ function createPromise(position, delay) {
   });
 }
 
-ourForm.addEventListener('submit', (event) => {
+ourForm.addEventListener('submit', formHandler);
+
+function formHandler(event) {
   event.preventDefault();
   const formData = new FormData(event.target);
   const customDelay = parseInt(formData.get('delay'), 10);
@@ -32,4 +34,4 @@ ourForm.addEventListener('submit', (event) => {
         Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
   }
-});
+};
