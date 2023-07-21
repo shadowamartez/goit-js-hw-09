@@ -26,38 +26,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const datePicker = flatpickr("#datetime-picker", {
         enableTime: true,
         time_24hr: true,
-        defaultDate: new Date(),
+        defaultDate: Date.now(),
         minuteIncrement: 1,
-        onClose(selectedDates) {
-        const selectedDate = selectedDates[0];
-        const currentDate = new Date();
+        onClose([selectedDate]) {
+        const currentDate = Date.now();
         if (selectedDate <= currentDate) {
             window.alert("Please choose a date in the future");
+            startBtn.setAttribute("disabled", true);
         } else {
             startBtn.removeAttribute("disabled");
         }
     },
 });
 
+    
+function updateTimerDisplay(time) {
+    timerEl.innerHTML = time;
+}
+    
 startBtn.addEventListener("click", function () {
-    const selectedDate = datePicker.selectedDates[0];
-    const currentDate = new Date();
+    const [selectedDate] = datePicker.selectedDates;
+    const currentDate = Date.now();
     if (selectedDate <= currentDate) {
         return;
     }
 
     const intervalId = setInterval(() => {
-        const timeDifference = selectedDate.getTime() - new Date().getTime();
+        const timeDifference = new Date(selectedDate).getTime() - Date.now();
 
         if (timeDifference <= 0) {
         clearInterval(intervalId);
-        timerEl.innerHTML = "00:00:00:00";
+        updateTimerDisplay("00:00:00:00");
         return;
         }
 
         const { days, hours, minutes, seconds } = convertMs(timeDifference);
         const formattedTime = `${addLeadingZero(days)}:${addLeadingZero(hours)}:${addLeadingZero(minutes)}:${addLeadingZero(seconds)}`;
-        timerEl.innerHTML = formattedTime;
+        updateTimerDisplay(formattedTime);
         }, 1000);
     });
 });

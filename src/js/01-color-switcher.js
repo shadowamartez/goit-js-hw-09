@@ -10,9 +10,13 @@ function getRandomHexColor() {
 
 let changeColorInterval;
 
+function toggleButtonState(change) {
+    startBtn.disabled = change;
+    stopBtn.disabled = !change;
+}
+
 function startChanging() {
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
+    toggleButtonState(true);
 
     changeColorInterval = setInterval(() => {
         document.body.style.backgroundColor = getRandomHexColor();
@@ -20,8 +24,7 @@ function startChanging() {
 }
 
 function stopChanging() {
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
+    toggleButtonState(false);
 
     clearInterval(changeColorInterval);
 }
